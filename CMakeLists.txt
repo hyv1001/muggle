@@ -22,6 +22,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 add_subdirectory(3rdparty)
-add_subdirectory(source)
+add_subdirectory(engine)
 add_subdirectory(samples)
 
