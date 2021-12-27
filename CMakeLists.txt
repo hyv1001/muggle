@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(muggle VERSION 0.1.0)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(CMakeDependentOption)
+
+option(MUGGLE_WITH_VULKAN "Build Vulkan render backend" ON)
+cmake_dependent_option(MUGGLE_WITH_DX12 "Build DX12 render backend" ON "WIN32" OFF)
+
+if (MSVC)
+    string(REGEX REPLACE "/W[0-4]\\s*" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(APPEND CMAKE_CXX_FLAGS " /W4 /MP")
+endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
+add_subdirectory(3rdparty)
+add_subdirectory(source)
+add_subdirectory(samples)
+
