@@ -1,13 +1,15 @@
 #pragma once
 
 #include <cstdint>
-#include <stdexcept>
 #include <spdlog/spdlog.h>
+#include <stdexcept>
 
-extern class LogSystem *gLoggerSystem;
-
-class LogSystem
+namespace muggle
 {
+
+extern class LogSystem* gLoggerSystem;
+
+class LogSystem {
 public:
     enum class LogLevel : uint8_t
     {
@@ -23,33 +25,33 @@ public:
     ~LogSystem();
 
     template<typename... TARGS>
-    static void log(LogLevel level, TARGS &&...args)
+    static void log(LogLevel level, TARGS&&... args)
     {
         switch (level)
         {
-        case LogLevel::debug:
-            gLoggerSystem->logger_->debug(std::forward<TARGS>(args)...);
-            break;
-        case LogLevel::info:
-            gLoggerSystem->logger_->info(std::forward<TARGS>(args)...);
-            break;
-        case LogLevel::warn:
-            gLoggerSystem->logger_->warn(std::forward<TARGS>(args)...);
-            break;
-        case LogLevel::error:
-            gLoggerSystem->logger_->error(std::forward<TARGS>(args)...);
-            break;
-        case LogLevel::fatal:
-            gLoggerSystem->logger_->critical(std::forward<TARGS>(args)...);
-            fatalCallback(std::forward<TARGS>(args)...);
-            break;
-        default:
-            break;
+            case LogLevel::debug:
+                gLoggerSystem->logger_->debug(std::forward<TARGS>(args)...);
+                break;
+            case LogLevel::info:
+                gLoggerSystem->logger_->info(std::forward<TARGS>(args)...);
+                break;
+            case LogLevel::warn:
+                gLoggerSystem->logger_->warn(std::forward<TARGS>(args)...);
+                break;
+            case LogLevel::error:
+                gLoggerSystem->logger_->error(std::forward<TARGS>(args)...);
+                break;
+            case LogLevel::fatal:
+                gLoggerSystem->logger_->critical(std::forward<TARGS>(args)...);
+                fatalCallback(std::forward<TARGS>(args)...);
+                break;
+            default:
+                break;
         }
     }
 
     template<typename... TARGS>
-    static void fatalCallback(TARGS &&...args)
+    static void fatalCallback(TARGS&&... args)
     {
         const std::string format_str = fmt::format(std::forward<TARGS>(args)...);
         throw std::runtime_error(format_str);
@@ -68,3 +70,5 @@ private:
 #define LOG_ERROR(...) LogSystem::log(LogSystem::LogLevel::error, ##__VA_ARGS__);
 
 #define LOG_FATAL(...) LogSystem::log(LogSystem::LogLevel::fatal, ##__VA_ARGS__);
+
+} // namespace muggle
