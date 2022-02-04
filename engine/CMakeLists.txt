@@ -8,3 +8,5 @@ target_include_directories(muggle PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(muggle spdlog imgui glfw nvrhi)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${muggle_src})
+
+set_target_properties(muggle PROPERTIES FOLDER "Engine")
