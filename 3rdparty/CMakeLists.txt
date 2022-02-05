@@ -76,3 +76,12 @@ if(NOT TARGET assimp)
     set_target_properties(zlibstatic PROPERTIES FOLDER ${third_party_folder}/assimp)
     set_target_properties(UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER ${third_party_folder}/assimp)
 endif()
+
+if(NOT TARGET meshoptimizer)
+    option(MESHOPT_BUILD_DEMO "" OFF)
+    option(MESHOPT_BUILD_GLTFPACK "" OFF)
+    option(MESHOPT_BUILD_SHARED_LIBS "" OFF)
+
+    add_subdirectory(meshoptimizer)
+    set_target_properties(meshoptimizer PROPERTIES FOLDER ${third_party_folder}/meshoptimizer)
+endif()
