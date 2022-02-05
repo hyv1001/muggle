@@ -150,14 +150,15 @@ void main()
     GLuint perFrameDataBuf;
     glCreateBuffers(1, &perFrameDataBuf);
     glNamedBufferStorage(perFrameDataBuf, sizeof(glm::mat4), nullptr, GL_DYNAMIC_STORAGE_BIT);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 0, perFrameDataBuf, 0, sizeof(glm::mat4));
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, perFrameDataBuf);
 
-    renderData.shaderVertex   = shaderVertex;
-    renderData.shaderFragment = shaderFragment;
-    renderData.shaderProgram  = program;
-    renderData.vao            = vao;
-    renderData.handleVBO      = handleVBO;
-    renderData.handleElements = handleElements;
+    renderData.shaderVertex       = shaderVertex;
+    renderData.shaderFragment     = shaderFragment;
+    renderData.shaderProgram      = program;
+    renderData.vao                = vao;
+    renderData.handleVBO          = handleVBO;
+    renderData.handleElements     = handleElements;
+    renderData.perFrameDataBuffer = perFrameDataBuf;
 }
 
 void imgui_draw(int width, int height, const ImRenderData& renderData)
@@ -279,7 +280,7 @@ int main(void)
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_SCISSOR_TEST);
-    glClearColor(1.f, 1.f, 1.f, 1.f);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
     while (!glfwWindowShouldClose(window))
     {
