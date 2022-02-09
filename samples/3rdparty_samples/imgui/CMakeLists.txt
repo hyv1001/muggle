@@ -6,4 +6,4 @@ include(../../../cmake/common_marcos.cmake)
 
 SETUP_SAMPLE(imgui_example "Samples/3rdParty")
 
-target_link_libraries(imgui_example PUBLIC glad glfw glm imgui)
+target_link_libraries(imgui_example PUBLIC glad glfw glm imgui muggle)
