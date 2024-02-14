@@ -89,8 +89,8 @@ namespace glTF
     struct Skin
     {
         int32_t inverseBindMatricesBufferIndex;
-        int32_t skeletonNodeIndex;
-        uint32_t jonitCount;
+        int32_t skeletonRootNodeIndex;
+        uint32_t jonitsCount;
         int32_t* joints;
     };
 
@@ -157,21 +157,8 @@ namespace glTF
     {
         struct Attribute
         {
-            enum class Semantic
-            {
-                POSITION,
-                NORMAL,
-                TANGENT,
-                TEXCOORD_0,
-                TEXCOORD_1,
-                COLOR_0,
-                JOINTS_0,
-                WEIGHTS_0,
-                Count
-            };
-
-            int32_t accessor;
-            Semantic semantic;
+            std::string key;
+            int32_t     accessorIndex;
         };
 
         uint32_t attributesCount;
@@ -185,7 +172,7 @@ namespace glTF
         // 4: TRIANGLES
         // 5: TRIANGLE_STRIP
         // 6: TRIANGLE_FAN
-        uint32_t mode;
+        int32_t mode;
         uint32_t targetsCount;
         Attribute* targets;
     };
@@ -304,18 +291,18 @@ namespace glTF
     };
 
     struct Animation
-	{
-		uint32_t channelsCount;
-		AnimationChannel* channels;
-		uint32_t samplersCount;
-		AnimationSampler* samplers;
-	};
+    {
+        uint32_t channelsCount;
+        AnimationChannel* channels;
+        uint32_t samplersCount;
+        AnimationSampler* samplers;
+    };
 
     struct AccessorSparseValues
-	{
-		int32_t bufferView;
-		int32_t byteOffset;
-	};
+    {
+        int32_t bufferView;
+        int32_t byteOffset;
+    };
 
     struct Scene
     {
@@ -324,71 +311,71 @@ namespace glTF
     };
 
     struct Sampler
-	{
-		enum class MagFilter
-		{
-			NEAREST = 9728,
-			LINEAR = 9729,
-		};
+    {
+        enum class MagFilter
+        {
+            NEAREST = 9728,
+            LINEAR = 9729,
+        };
 
-		enum class MinFilter
-		{
-			NEAREST = 9728,
-			LINEAR = 9729,
-			NEAREST_MIPMAP_NEAREST = 9984,
-			LINEAR_MIPMAP_NEAREST = 9985,
-			NEAREST_MIPMAP_LINEAR = 9986,
-			LINEAR_MIPMAP_LINEAR = 9987,
-		};
+        enum class MinFilter
+        {
+            NEAREST = 9728,
+            LINEAR = 9729,
+            NEAREST_MIPMAP_NEAREST = 9984,
+            LINEAR_MIPMAP_NEAREST = 9985,
+            NEAREST_MIPMAP_LINEAR = 9986,
+            LINEAR_MIPMAP_LINEAR = 9987,
+        };
 
-		enum class WrapMode
-		{
-			CLAMP_TO_EDGE = 33071,
-			MIRRORED_REPEAT = 33648,
-			REPEAT = 10497,
-		};
+        enum class WrapMode
+        {
+            CLAMP_TO_EDGE = 33071,
+            MIRRORED_REPEAT = 33648,
+            REPEAT = 10497,
+        };
 
-		MagFilter magFilter;
-		MinFilter minFilter;
-		WrapMode wrapS;
-		WrapMode wrapT;
-	};
+        MagFilter magFilter;
+        MinFilter minFilter;
+        WrapMode wrapS;
+        WrapMode wrapT;
+    };
 
     struct glTF
-	{
-		Asset asset;
-		uint32_t buffersCount;
-		Buffer* buffers;
-		uint32_t bufferViewsCount;
-		BufferView* bufferViews;
-		uint32_t accessorsCount;
-		Accessor* accessors;
-		uint32_t imagesCount;
-		Image* images;
-		uint32_t texturesCount;
-		Texture* textures;
-		uint32_t materialsCount;
-		Material* materials;
-		uint32_t meshesCount;
-		Mesh* meshes;
-		uint32_t nodesCount;
-		Node* nodes;
-		uint32_t samplersCount;
-		Sampler* samplers;
-        int32_t scene;
-		uint32_t scenesCount;
-		Scene* scenes;
-		uint32_t skinsCount;
-		Skin* skins;
-		uint32_t camerasCount;
-		Camera* cameras;
-		uint32_t animationsCount;
-		Animation* animations;
-        uint32_t extensionsRequiredCount;
-        std::string* extensionsRequired;
-        uint32_t extensionsUsedCount;
-        std::string* extensionsUsed;
-	};
+    {
+        Asset asset;
+        uint32_t buffersCount {0};
+        Buffer* buffers { nullptr};
+        uint32_t bufferViewsCount {0};
+        BufferView* bufferViews {nullptr};
+        uint32_t accessorsCount {0};
+        Accessor* accessors { nullptr };
+        uint32_t imagesCount {0};
+        Image* images { nullptr};
+        uint32_t texturesCount {0};
+        Texture* textures { nullptr};
+        uint32_t materialsCount {0};
+        Material* materials {nullptr};
+        uint32_t meshesCount {0};
+        Mesh* meshes { nullptr};
+        uint32_t nodesCount {0};
+        Node* nodes { nullptr};
+        uint32_t samplersCount {0};
+        Sampler* samplers {nullptr};
+        int32_t scene {kInvalidIntValue};
+        uint32_t scenesCount {0};
+        Scene* scenes { nullptr};
+        uint32_t skinsCount {0};
+        Skin* skins { nullptr};
+        uint32_t camerasCount {0};
+        Camera* cameras { nullptr};
+        uint32_t animationsCount {0};
+        Animation* animations {nullptr};
+        uint32_t extensionsRequiredCount {0};
+        std::string* extensionsRequired {nullptr};
+        uint32_t extensionsUsedCount {0};
+        std::string* extensionsUsed {nullptr};
+    };
 
     int32_t getDataOffset(int32_t accessorOffset, int32_t bufferViewOffset);
 } // namespace glTF
@@ -399,6 +386,6 @@ namespace glTF
     int32_t gltfGetAttributeAccessorIndex(
         const glTF::MeshPrimitive::Attribute* attributes,
         uint32_t attributeCount,
-        glTF::MeshPrimitive::Attribute::Semantic semantic);
+        std::string attributeName);
 
 } // namespace muggle

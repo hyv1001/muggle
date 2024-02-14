@@ -5,15 +5,18 @@
 
 namespace muggle
 {
-LogSystem* gLoggerSystem;
+vfs::VFileSystem* gFileSystem;
+LogSystem*        gLoggerSystem;
 
 void init()
 {
+    gFileSystem   = new vfs::VFileSystem();
     gLoggerSystem = new LogSystem();
 }
 
 void terminate()
 {
     delete gLoggerSystem;
+    delete gFileSystem;
 }
 } // namespace muggle
