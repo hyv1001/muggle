@@ -9,9 +9,11 @@ endif()
 
 if(NOT TARGET glad)
     set(GLAD_SOURCES glad/src/gl.c glad/src/vulkan.c)
+
     if(WIN32)
         set(GLAD_SOURCES ${GLAD_SOURCES} glad/src/wgl.c)
     endif()
+
     add_library(glad ${GLAD_SOURCES})
     target_include_directories(glad PUBLIC "glad/include")
     set_target_properties(glad PROPERTIES FOLDER ${third_party_folder}/glad)
@@ -46,15 +48,19 @@ if(NOT TARGET nvrhi)
     option(NVRHI_INSTALL "" OFF)
     add_subdirectory(nvrhi)
     set_target_properties(nvrhi PROPERTIES FOLDER ${third_party_folder}/nvrhi)
-    if (NVRHI_WITH_DX11)
+
+    if(NVRHI_WITH_DX11)
         set_target_properties(nvrhi_d3d11 PROPERTIES FOLDER ${third_party_folder}/nvrhi)
     endif()
-    if (NVRHI_WITH_DX12)
+
+    if(NVRHI_WITH_DX12)
         set_target_properties(nvrhi_d3d12 PROPERTIES FOLDER ${third_party_folder}/nvrhi)
     endif()
-    if (NVRHI_WITH_VULKAN)
+
+    if(NVRHI_WITH_VULKAN)
         set_target_properties(nvrhi_vk PROPERTIES FOLDER ${third_party_folder}/nvrhi)
     endif()
+
     set_target_properties(uninstall PROPERTIES FOLDER ${third_party_folder}/nvrhi)
 endif()
 
@@ -67,7 +73,7 @@ if(NOT TARGET assimp)
     option(ASSIMP_INSTALL "" OFF)
     option(ASSIMP_INSTALL_PDB "" OFF)
     option(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT "" OFF)
-    option(ASSIMP_NO_EXPORT  "" ON)
+    option(ASSIMP_NO_EXPORT "" ON)
     option(ASSIMP_BUILD_OBJ_IMPORTER "" ON)
     option(ASSIMP_BUILD_GLTF_IMPORTER "" ON)
 
@@ -104,5 +110,6 @@ if(NOT TARGET glslang)
     set_target_properties(OSDependent PROPERTIES FOLDER ${third_party_folder}/glslang)
     set_target_properties(SPIRV PROPERTIES FOLDER ${third_party_folder}/glslang)
     set_target_properties(SPVRemapper PROPERTIES FOLDER ${third_party_folder}/glslang)
-    set_target_properties(HLSL PROPERTIES FOLDER ${third_party_folder}/glslang)
+
+    # set_target_properties(HLSL PROPERTIES FOLDER ${third_party_folder}/glslang)
 endif()
