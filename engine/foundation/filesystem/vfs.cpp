@@ -9,7 +9,12 @@
 #include <utility>
 
 #ifdef WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
 #include <Shlwapi.h>
+#include <windows.h>
+#include <wchar.h>
 #else
 extern "C"
 {
@@ -284,7 +289,7 @@ bool VFileSystem::unmount(const std::filesystem::path& path)
 
 bool VFileSystem::findMountPoint(const std::filesystem::path& path,
                                  std::filesystem::path*       pRelativePath,
-                                 IFileSystem**                ppFS)
+                                 IFileSystem**                ppFS) const
 {
     std::string spath = path.lexically_normal().generic_string();
 
@@ -334,6 +339,20 @@ bool VFileSystem::isFileExists(const std::filesystem::path& name)
     }
 
     return false;
+}
+
+std::filesystem::path VFileSystem::getFullPath(const std::filesystem::path& name) const
+{
+    std::filesystem::path relativePath;
+    IFileSystem*          fs = nullptr;
+
+    if (findMountPoint(name, &relativePath, &fs))
+    {
+        auto fullPath = fs->getFullPath(relativePath);
+        return fs->getFullPath(relativePath);
+    }
+
+    return name;
 }
 
 std::shared_ptr<IBlob> VFileSystem::readFile(const std::filesystem::path& name)
@@ -441,4 +460,21 @@ std::string muggle::vfs::getFileSearchRegex(const std::filesystem::path&    path
     }
 
     return regex.str();
+}
+
+std::filesystem::path muggle::vfs::getCurrentProcessDirectory()
+{
+#ifdef WIN32
+    wchar_t buf[MAX_PATH];
+    GetModuleFileNameW(nullptr, buf, MAX_PATH);
+    return std::filesystem::path(buf).parent_path();
+#else
+    char buf[PATH_MAX];
+    ssize_t len = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
+    if (len != -1)
+    {
+        buf[len] = '\0';
+        return std::filesystem::path(buf).parent_path();
+    }
+#endif
 }

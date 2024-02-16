@@ -59,6 +59,8 @@ class IFileSystem {
 public:
     virtual ~IFileSystem() = default;
 
+    virtual std::filesystem::path getFullPath(const std::filesystem::path& name) const = 0;
+
     // Test if a folder exists
     virtual bool isFolderExists(const std::filesystem::path& name) = 0;
 
@@ -93,6 +95,12 @@ public:
 // An implementation of virtual file system that directly maps to the OS files
 class NativeFileSystem : public IFileSystem {
 public:
+
+    std::filesystem::path getFullPath(const std::filesystem::path& name) const override
+    {
+        return name;
+    }
+
     bool                   isFolderExists(const std::filesystem::path& name) override;
     bool                   isFileExists(const std::filesystem::path& name) override;
     std::shared_ptr<IBlob> readFile(const std::filesystem::path& name) override;
@@ -118,6 +126,11 @@ public:
         return basePath_;
     }
 
+    std::filesystem::path getFullPath(const std::filesystem::path& name) const override
+    {
+        return basePath_ / name.relative_path();
+    }
+
     bool                   isFolderExists(const std::filesystem::path& name) override;
     bool                   isFileExists(const std::filesystem::path& name) override;
     std::shared_ptr<IBlob> readFile(const std::filesystem::path& name) override;
@@ -139,6 +152,8 @@ private:
 // Does not have any file systems by default, all of them must be mounted first.
 class VFileSystem : public IFileSystem {
 public:
+    std::filesystem::path getFullPath(const std::filesystem::path& name) const;
+
     void mount(const std::filesystem::path& path, std::shared_ptr<IFileSystem> fs);
     void mount(const std::filesystem::path& path, const std::filesystem::path& nativePath);
     bool unmount(const std::filesystem::path& path);
@@ -156,12 +171,17 @@ public:
                                                 bool                         allowDuplicates /* = false */) override;
 
 private:
-    bool findMountPoint(const std::filesystem::path& path, std::filesystem::path* pRelativePath, IFileSystem** ppFS);
+    bool findMountPoint(const std::filesystem::path& path, std::filesystem::path* pRelativePath, IFileSystem** ppFS) const;
 
     std::vector<std::pair<std::string, std::shared_ptr<IFileSystem>>> mountPoints_;
 };
 
 std::string getFileSearchRegex(const std::filesystem::path& path, const std::vector<std::string>& extensions);
 
+// utility function to get the path to the executable
+std::filesystem::path getCurrentProcessDirectory();
+
+
 } // namespace vfs
+
 } // namespace muggle

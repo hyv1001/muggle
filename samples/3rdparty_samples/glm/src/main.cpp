@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "muggle.h"
+
 static const char* shaderCodeVertex = R"(
 #version 460 core
 layout (std140, binding = 0) uniform PerFrameData {
@@ -69,6 +71,8 @@ struct PerFrameData
 
 int main(void)
 {
+    muggle::init();
+
     glfwSetErrorCallback([](int error, const char* description) {
         (void)error;
         fprintf(stderr, "Error: %s\n", description);
@@ -170,6 +174,8 @@ int main(void)
 
     glfwDestroyWindow(window);
     glfwTerminate();
+
+    muggle::terminate();
 
     return 0;
 }

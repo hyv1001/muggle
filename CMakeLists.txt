@@ -12,7 +12,7 @@ cmake_dependent_option(MUGGLE_WITH_DX12 "Build DX12 render backend" ON "WIN32" O
 
 if(MSVC)
     string(REGEX REPLACE "/W[0-4]\\s*" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    string(APPEND CMAKE_CXX_FLAGS " /W4 /MP")
+    string(APPEND CMAKE_CXX_FLAGS " /W4 /MP /wd4819")
 endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")

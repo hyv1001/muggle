@@ -50,7 +50,10 @@ struct PerFrameData
 
 bool aiLoadMesh(const char* scene_file, std::vector<glm::vec3>& positions)
 {
-    const aiScene* scene = aiImportFile(scene_file, aiProcess_Triangulate);
+    auto fullpath = muggle::gFileSystem->getFullPath(scene_file).generic_string();
+    LOG_INFO("scene file path: {}", fullpath);
+
+    const aiScene* scene = aiImportFile(fullpath.c_str(), aiProcess_Triangulate);
     if (!scene || !scene->HasMeshes())
     {
         LOG_ERROR("assimp import file {} failed!", scene_file);
@@ -125,7 +128,7 @@ int main(void)
     glUseProgram(program);
 
     std::vector<glm::vec3> positions;
-    const char*            mesh_file = "content/rubber_duck/scene.gltf";
+    const char*            mesh_file = "/ROOT/content/rubber_duck/scene.gltf";
     if (!aiLoadMesh(mesh_file, positions))
     {
         LOG_FATAL("Error: load mesh failed!");
