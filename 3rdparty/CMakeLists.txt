@@ -44,26 +44,6 @@ if(NOT TARGET spdlog)
     set_target_properties(spdlog PROPERTIES FOLDER ${third_party_folder}/spdlog)
 endif()
 
-if(NOT TARGET nvrhi)
-    option(NVRHI_INSTALL "" OFF)
-    add_subdirectory(nvrhi)
-    set_target_properties(nvrhi PROPERTIES FOLDER ${third_party_folder}/nvrhi)
-
-    if(NVRHI_WITH_DX11)
-        set_target_properties(nvrhi_d3d11 PROPERTIES FOLDER ${third_party_folder}/nvrhi)
-    endif()
-
-    if(NVRHI_WITH_DX12)
-        set_target_properties(nvrhi_d3d12 PROPERTIES FOLDER ${third_party_folder}/nvrhi)
-    endif()
-
-    if(NVRHI_WITH_VULKAN)
-        set_target_properties(nvrhi_vk PROPERTIES FOLDER ${third_party_folder}/nvrhi)
-    endif()
-
-    # set_target_properties(uninstall PROPERTIES FOLDER ${third_party_folder}/nvrhi)
-endif()
-
 if(NOT TARGET assimp)
     option(BUILD_SHARED_LIBS "" OFF)
 
