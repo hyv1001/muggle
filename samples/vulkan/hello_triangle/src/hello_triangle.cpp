@@ -229,6 +229,7 @@ void HelloTriangleApplication::initVulkan()
     pickPhysicalDevice();
     createLogicalDevice();
     createSwapChain();
+    createRenderPass();
     createGraphicsPipeline();
 }
 
@@ -835,9 +836,73 @@ void HelloTriangleApplication::createGraphicsPipeline()
         LOG_INFO("Create Pipeline Layout Succeed!")
     }
 
+    VkGraphicsPipelineCreateInfo pipelineInfo {};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.stageCount = 2;
+    pipelineInfo.pStages = shaderStages;
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &inputAssembly;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizer;
+    pipelineInfo.pMultisampleState = &multisampling;
+    pipelineInfo.pDepthStencilState = nullptr; // Optional
+    pipelineInfo.pColorBlendState = &colorBlending;
+    pipelineInfo.pDynamicState = &dynamicState; // Optional
+    pipelineInfo.layout = pipelineLayout_;
+    pipelineInfo.renderPass = renderPass_;
+    pipelineInfo.subpass = 0;
+    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
+    pipelineInfo.basePipelineIndex = -1;              // Optional
+
+    if (vkCreateGraphicsPipelines(device_, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline_) != VK_SUCCESS)
+    {
+        LOG_FATAL("Create Graphics Pipeline Failed£¡")
+    }
+    else
+    {
+        LOG_INFO("Create Graphics Pipeline Succeed!")
+    }
 
     vkDestroyShaderModule(device_, fragShaderModule, nullptr);
     vkDestroyShaderModule(device_, vertShaderModule, nullptr);
+}
+
+void HelloTriangleApplication::createRenderPass()
+{
+    VkAttachmentDescription colorAttachment {};
+    colorAttachment.format = swapChainImageFormat_;
+    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+    VkAttachmentReference colorAttachmentRef {};
+    colorAttachmentRef.attachment = 0;
+    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+    VkSubpassDescription subpass {};
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.colorAttachmentCount = 1;
+    subpass.pColorAttachments = &colorAttachmentRef;
+
+    VkRenderPassCreateInfo renderPassInfo {};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.attachmentCount = 1;
+    renderPassInfo.pAttachments = &colorAttachment;
+    renderPassInfo.subpassCount = 1;
+    renderPassInfo.pSubpasses = &subpass;
+
+    if (vkCreateRenderPass(device_, &renderPassInfo, nullptr, &renderPass_) != VK_SUCCESS)
+    {
+        LOG_FATAL("Create Render Pass Failed£¡")
+    }
+    else
+    {
+        LOG_INFO("Create Render Pass Succeed!")
+    }
 }
 
 void HelloTriangleApplication::mainLoop()
@@ -850,7 +915,9 @@ void HelloTriangleApplication::mainLoop()
 
 void HelloTriangleApplication::cleanup()
 {
+    vkDestroyPipeline(device_, graphicsPipeline_, nullptr);
     vkDestroyPipelineLayout(device_, pipelineLayout_, nullptr);
+    vkDestroyRenderPass(device_, renderPass_, nullptr);
 
     for (auto imageView : swapChainImageViews_)
     {

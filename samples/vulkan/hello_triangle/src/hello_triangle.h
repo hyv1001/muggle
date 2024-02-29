@@ -23,6 +23,7 @@ private:
     void createLogicalDevice();
     void createSwapChain();
     void createGraphicsPipeline();
+    void createRenderPass();
 
     bool checkValidationLayerSupport() const;
     bool checkDeviceExtensionSupport(VkPhysicalDevice device) const;
@@ -48,7 +49,9 @@ private:
     VkFormat swapChainImageFormat_;
     VkExtent2D swapChainExtent_;
 
+    VkRenderPass renderPass_ {VK_NULL_HANDLE};
     VkPipelineLayout pipelineLayout_ {VK_NULL_HANDLE};
+    VkPipeline graphicsPipeline_ {VK_NULL_HANDLE};
 
     GLFWwindow* window_ {nullptr};
 
