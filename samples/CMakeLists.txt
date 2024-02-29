@@ -6,3 +6,5 @@ add_subdirectory(3rdparty_samples/glm)
 add_subdirectory(3rdparty_samples/imgui)
 add_subdirectory(3rdparty_samples/assimp)
 add_subdirectory(3rdparty_samples/glslang)
+
+add_subdirectory(vulkan/hello_triangle)

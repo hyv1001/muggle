@@ -59,7 +59,7 @@ std::shared_ptr<IBlob> NativeFileSystem::readFile(const std::filesystem::path& n
 
     if (!file.is_open())
     {
-        LOG_ERROR("Open File: {} Failed!", name.string());
+        LOG_ERROR("Open File: {} Failed!", name.string().c_str());
         return nullptr;
     }
 

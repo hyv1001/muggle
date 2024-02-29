@@ -61,14 +61,14 @@ private:
     std::shared_ptr<spdlog::logger> logger_;
 };
 
-#define LOG_DEBUG(...) LogSystem::log(LogSystem::LogLevel::debug, ##__VA_ARGS__);
+#define LOG_DEBUG(...) muggle::LogSystem::log(muggle::LogSystem::LogLevel::debug, ##__VA_ARGS__);
 
-#define LOG_INFO(...) LogSystem::log(LogSystem::LogLevel::info, ##__VA_ARGS__);
+#define LOG_INFO(...) muggle::LogSystem::log(muggle::LogSystem::LogLevel::info, ##__VA_ARGS__);
 
-#define LOG_WARN(...) LogSystem::log(LogSystem::LogLevel::warn, ##__VA_ARGS__);
+#define LOG_WARN(...) muggle::LogSystem::log(muggle::LogSystem::LogLevel::warn, ##__VA_ARGS__);
 
-#define LOG_ERROR(...) LogSystem::log(LogSystem::LogLevel::error, ##__VA_ARGS__);
+#define LOG_ERROR(...) muggle::LogSystem::log(muggle::LogSystem::LogLevel::error, ##__VA_ARGS__);
 
-#define LOG_FATAL(...) LogSystem::log(LogSystem::LogLevel::fatal, ##__VA_ARGS__);
+#define LOG_FATAL(...) muggle::LogSystem::log(muggle::LogSystem::LogLevel::fatal, ##__VA_ARGS__);
 
 } // namespace muggle
