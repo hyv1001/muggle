@@ -19,5 +19,4 @@ namespace muggle
     };
 
 
-
 } // namespace muggle
